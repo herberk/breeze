@@ -34,10 +34,21 @@
                     </x-slot>
 
                     <x-slot name="content">
+                        <!-- Account Management -->
+                        <div class="block px-4 py-2 text-xs text-gray-400">
+                            {{ __('Manage Account') }}
+                        </div>
+{{--                        {{ route('profile.show') }}--}}
+                        <x-dropdown-link href="#">
+                            {{ __('Profile') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link href="#">
+                            {{ __('Tabla de Usuarios') }}
+                        </x-dropdown-link>
+
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-
                             <x-dropdown-link href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
