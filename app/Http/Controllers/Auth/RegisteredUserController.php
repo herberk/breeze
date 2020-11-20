@@ -9,6 +9,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class RegisteredUserController extends Controller
 {
@@ -48,4 +49,30 @@ class RegisteredUserController extends Controller
 
         return redirect(RouteServiceProvider::HOME);
     }
+
+    public function show(Request $request)
+    {
+       return view('profile.show', [
+        'request' => $request,
+        'user' => $request->user(),
+    ]);
+    }
+    public function update(Request $request, $id){
+        $this->validate($request, [
+            'nickname' => [ 'string', 'max:10'],
+            'name' => 'required|string|max:255',
+            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($id)],
+        ]);
+        $users = user::find($id);
+        $users->nickname= request('nickname');
+        $users->name= request('name');
+        $users->email= request('email');
+        $users->save();
+
+      return back()->with('message', 'Las modificaciones '.$request->name.' fueron registrados en la BBDD  ');
+//        return redirect()->route('users')->with('success', 'La categoria  fue modificada');   success
+//        session()->flash('message', 'Las modificaciones '.$request->name.' fueron registrados en la BBDD  ');
+
+
+}
 }
